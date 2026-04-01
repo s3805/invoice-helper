@@ -74,3 +74,9 @@
 💡 提示
 
 本项目所有逻辑均在前端完成，使用时请确保网络连接正常以调用 AI 接口进行视觉识别。
+
+<img width="1865" height="1260" alt="image" src="https://github.com/user-attachments/assets/f1d4db56-4450-4089-844f-26b0147720be" />
+
+<img width="1816" height="1194" alt="image" src="https://github.com/user-attachments/assets/ecfe7ac5-ee0a-48b3-a0f5-5ecbc02e9aca" />
+
+
