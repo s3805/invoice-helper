@@ -22,6 +22,9 @@
 
 🛠️ 如何使用
 
+⚠️ **重要：配置 API Key**
+图片格式发票的识别依赖 Google Gemini 视觉引擎。使用前请先在 `index.html` 中找到 `const apiKey = "";`，填入你的 [Google AI Studio API Key](https://aistudio.google.com/apikey) 后方可使用图片识别功能。PDF 发票无需 API Key，可在本地直接解析。
+
 1、访问网页：打开部署好的 GitHub Pages 链接。
 
 2、上传发票：将包含发票的文件夹或多个文件直接拖入页面的“拖拽区域”。
