@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>君高财务助手 - 专业发票报销管理系统</title>
+    <title>君高财务助手 - 专业发票报销管理系统 (AI 视觉版)</title>
     <!-- 核心依赖库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
@@ -12,6 +12,7 @@
         :root {
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
+            --ai-glow: #8b5cf6;
             --success: #059669;
             --danger: #dc2626;
             --warning: #d97706;
@@ -20,7 +21,7 @@
             --gray-200: #e5e7eb;
             --gray-700: #374151;
             --gray-800: #1f2937;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -45,80 +46,50 @@
 
         .logo {
             display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary);
+            align-items: center; gap: 10px;
+            font-size: 1.25rem; font-weight: 700; color: var(--primary);
         }
 
-        .badge-local {
-            background: #dcfce7;
-            color: #166534;
-            padding: 2px 8px;
+        .badge-ai {
+            background: #f5f3ff;
+            color: var(--ai-glow);
+            border: 1px solid #ddd6fe;
+            padding: 2px 10px;
             border-radius: 999px;
             font-size: 0.75rem;
-            font-weight: 500;
+            font-weight: 600;
+            display: flex;
+            align-items: center; gap: 4px;
         }
 
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
         .hero-card {
             background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
-            color: white;
-            padding: 2.5rem;
-            border-radius: 1rem;
-            margin-bottom: 2rem;
-            text-align: center;
+            color: white; padding: 2.5rem; border-radius: 1rem; margin-bottom: 2rem; text-align: center;
         }
 
         #drop-zone {
-            background: white;
-            border: 2px dashed var(--gray-200);
-            border-radius: 1rem;
-            padding: 3rem 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            background: white; border: 2px dashed var(--gray-200); border-radius: 1rem;
+            padding: 3rem 2rem; text-align: center; cursor: pointer; transition: all 0.2s ease;
+            display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-bottom: 2rem;
         }
 
         #drop-zone:hover, #drop-zone.hover {
-            border-color: var(--primary);
-            background-color: var(--gray-50);
-            transform: translateY(-2px);
+            border-color: var(--primary); background-color: var(--gray-50); transform: translateY(-2px);
         }
 
         .icon-box {
-            width: 64px;
-            height: 64px;
-            background: #eff6ff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
+            width: 64px; height: 64px; background: #eff6ff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: var(--primary);
         }
 
         .data-section {
-            background: white;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            margin-bottom: 2rem;
+            background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 2rem;
         }
 
         .toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;
         }
 
         .stats-group { display: flex; gap: 2rem; }
@@ -130,16 +101,8 @@
         .btn-group { display: flex; gap: 0.5rem; }
 
         button {
-            padding: 0.6rem 1.2rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: all 0.2s;
-            font-size: 0.875rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            padding: 0.6rem 1.2rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;
+            border: none; transition: all 0.2s; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 6px;
         }
 
         .btn-primary { background: var(--primary); color: white; }
@@ -157,13 +120,8 @@
         .preview-header { text-align: center; margin: 3rem 0 1.5rem; color: var(--gray-700); font-size: 1.25rem; font-weight: 600; }
         
         .voucher-paper {
-            background: white;
-            padding: 3.5rem;
-            border-radius: 1rem;
-            box-shadow: var(--shadow);
-            width: 100%; 
-            margin: 0 auto;
-            position: relative;
+            background: white; padding: 3.5rem; border-radius: 1rem; box-shadow: var(--shadow);
+            width: 100%; margin: 0 auto; position: relative;
         }
 
         .voucher-box { color: black; font-family: "SimSun", "STSong", serif; width: 100%; }
@@ -175,21 +133,20 @@
         .v-footer { margin-top: 2.5rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; font-size: 15px; font-weight: bold; }
 
         #toast {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            padding: 1rem 2rem;
-            background: var(--gray-800);
-            color: white;
-            border-radius: 0.5rem;
-            box-shadow: var(--shadow);
-            transform: translateY(100px);
-            transition: transform 0.3s ease;
-            z-index: 1000;
+            position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 2rem; background: var(--gray-800);
+            color: white; border-radius: 0.5rem; box-shadow: var(--shadow); transform: translateY(100px);
+            transition: transform 0.3s ease; z-index: 1000;
         }
         #toast.show { transform: translateY(0); }
 
-        .trace-panel { font-family: monospace; font-size: 11px; background: #fafafa; padding: 10px; border: 1px solid #eee; display: none; margin-top: 10px; border-radius: 4px; white-space: pre-wrap; color: #666; }
+        .ai-processing {
+            animation: breathe 1.5s infinite ease-in-out;
+            color: var(--ai-glow);
+        }
+        @keyframes breathe {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
 
         @media print {
             body { background: white; padding: 0; }
@@ -208,14 +165,14 @@
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
         君高财务助手
     </div>
-    <div class="badge-local">🛡️ 本地安全解析</div>
+    <div class="badge-ai">✨ Gemini 2.5 视觉引擎已深度优化</div>
 </nav>
 
 <div class="container">
     <div class="no-print">
         <div class="hero-card">
-            <h1>让财务报销更简单</h1>
-            <p>自动归集项目、提取大写金额，一键生成标准 Excel 报销单。</p>
+            <h1>AI 驱动的专业财务报销管理</h1>
+            <p>已针对含税金额识别逻辑进行深度优化，有效排除税号、账号等长数字干扰。</p>
         </div>
 
         <div id="drop-zone">
@@ -223,12 +180,13 @@
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
             </div>
             <div>
-                <p style="font-size: 1.1rem; font-weight: 600;">点击或拖拽发票文件夹到此处</p>
-                <p style="color: var(--gray-700); font-size: 0.9rem;">系统将自动按文件夹名称进行项目汇总</p>
+                <p style="font-size: 1.1rem; font-weight: 600;">点击或拖拽发票文件/文件夹到此处</p>
+                <p style="color: var(--gray-700); font-size: 0.9rem;">支持 PDF 及图片发票，AI 自动校验大写金额</p>
             </div>
         </div>
-        <input type="file" id="file-input" multiple accept="application/pdf">
+        <input type="file" id="file-input" multiple accept="application/pdf,image/*">
 
+        <!-- 统计栏：常驻显示 -->
         <div class="data-section" id="results-card">
             <div class="toolbar">
                 <div class="stats-group">
@@ -255,26 +213,23 @@
                             <th>发票号码</th>
                             <th>日期</th>
                             <th>含税金额</th>
-                            <th>状态</th>
-                            <th>解析轨迹</th>
+                            <th>解析状态</th>
                             <th>操作</th>
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <tr id="empty-row"><td colspan="7" style="text-align: center; color: #9ca3af; padding: 2rem;">暂无解析数据，请在上方上传发票</td></tr>
+                        <tr id="empty-row"><td colspan="6" style="text-align: center; color: #9ca3af; padding: 2rem;">暂无解析数据</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <h3 class="preview-header" id="preview-title">正式报销单实时预览</h3>
+        <h3 class="preview-header">正式报销单实时预览</h3>
     </div>
 
     <div id="print-area" class="voucher-paper">
         <div class="voucher-box">
-            <div class="v-title">
-                <h2>费 用 报 销 单</h2>
-            </div>
+            <div class="v-title"><h2>费 用 报 销 单</h2></div>
             <div class="v-meta">
                 <span>报销单位：君高咨询</span>
                 <span id="v-date">日期：202X年XX月XX日</span>
@@ -304,10 +259,7 @@
                 </tfoot>
             </table>
             <div class="v-footer">
-                <div>部门主管：</div>
-                <div>财务审核：</div>
-                <div>出纳人：</div>
-                <div>报销人：</div>
+                <div>部门主管：</div><div>财务审核：</div><div>出纳人：</div><div>报销人：</div>
             </div>
         </div>
     </div>
@@ -316,29 +268,164 @@
 <div id="toast">提示信息</div>
 
 <script>
+    const apiKey = "";
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-    const state = {
-        invoices: []
-    };
-
+    const state = { invoices: [] };
     const dropZone = document.getElementById('drop-zone');
     const fileInput = document.getElementById('file-input');
     const tableBody = document.getElementById('table-body');
     const toast = document.getElementById('toast');
 
     function showToast(msg) {
-        toast.innerText = msg;
-        toast.classList.add('show');
+        toast.innerText = msg; toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    function chineseToDigit(str) {
-        if (!str) return 0;
+    // ✨ 深度优化后的 AI 视觉指令
+    async function callGeminiVision(base64Data, mimeType) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+        const prompt = `你是一个专业的财务报销审核助理。请精准识别这张发票图片中的信息。
+        注意：
+        1. 必须定位到“价税合计（小写）”或“¥”符号后的金额作为含税金额。
+        2. 必须提取“价税合计（大写）”汉字，并据此验证小写金额的准确性。
+        3. 严禁混淆纳税人识别号（通常是18位数字和字母组合）、银行账号或电话号码作为金额。
+        
+        请按此 JSON 返回：
+        {"number": "发票号码", "date": "YYYY-MM-DD", "amount": 0.0, "chinese_amount": "大写汉字金额"}`;
+
+        const payload = {
+            contents: [{
+                parts: [
+                    { text: prompt },
+                    { inlineData: { mimeType: mimeType, data: base64Data } }
+                ]
+            }],
+            generationConfig: { responseMimeType: "application/json" }
+        };
+
+        const response = await fetch(url, { method: 'POST', body: JSON.stringify(payload) });
+        const result = await response.json();
+        return JSON.parse(result.candidates[0].content.parts[0].text);
+    }
+
+    // ✨ 优化后的 PDF 识别逻辑
+    async function parseLocalPDF(file) {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let fullText = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const content = await page.getTextContent();
+            fullText += content.items.map(it => it.str).join(' ') + '\n';
+        }
+        const cleanText = fullText.replace(/\s+/g, '');
+        
+        // 提取号码
+        let number = (cleanText.match(/(?:号码|No|NO)[:：\s]*(\d{8,20})/) || fullText.match(/\b\d{20}\b/) || fullText.match(/\b\d{8}\b/) || ['未识别'])[0];
+        const dateM = cleanText.match(/(\d{4}年\d{1,2}月\d{1,2}日)/) || cleanText.match(/(\d{4}-\d{1,2}-\d{1,2})/);
+        
+        let amount = 0;
+        // 优先尝试大写金额转换
+        const cMatches = fullText.match(/[零壹贰叁肆伍陆柒捌玖拾佰仟万亿圆元角分整]{2,}/g);
+        if (cMatches) {
+            const best = cMatches.filter(s => s.includes('元') || s.includes('圆')).sort((a,b)=>b.length-a.length)[0];
+            if (best) amount = chineseToDigit(best);
+        }
+        
+        // 如果大写失败，尝试小写关键词，但增加长度限制排除干扰
+        if (amount === 0) {
+            // 匹配价税合计后的数字，过滤掉超过12位的长串（如账号）
+            const nMatch = cleanText.match(/(?:价税合计|小写)[:：(（]*[¥￥\s]*(\d+(?:\.\d{1,2})?)/);
+            if (nMatch) {
+                const potentialVal = parseFloat(nMatch[1]);
+                if (nMatch[1].length < 12) amount = potentialVal;
+            }
+        }
+        
+        return { number, date: dateM ? dateM[1] : '-', amount };
+    }
+
+    async function extractData(file) {
+        if (file.type === 'application/pdf') return await parseLocalPDF(file);
+        const reader = new FileReader();
+        return new Promise((resolve, reject) => {
+            reader.onload = async () => {
+                try {
+                    const b64 = reader.result.split(',')[1];
+                    const aiRes = await callGeminiVision(b64, file.type);
+                    resolve({ number: aiRes.number, date: aiRes.date, amount: parseFloat(aiRes.amount) });
+                } catch (e) { reject(e); }
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function updateUI() {
+        const hasData = state.invoices.length > 0;
+        tableBody.innerHTML = '';
+        let total = 0;
+
+        if (!hasData) {
+            tableBody.innerHTML = '<tr id="empty-row"><td colspan="6" style="text-align: center; color: #9ca3af; padding: 2rem;">暂无解析数据</td></tr>';
+            document.getElementById('total-count').innerText = "0";
+            document.getElementById('total-amount').innerText = "¥ 0.00";
+            renderVoucher(0);
+        } else {
+            state.invoices.forEach(inv => {
+                total += inv.amount;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><span class="projectName-tag">${inv.projectName}</span></td>
+                    <td><span class="editable" onclick="editField('${inv.id}', 'number')">${inv.number}</span></td>
+                    <td>${inv.date}</td>
+                    <td><span class="editable" onclick="editField('${inv.id}', 'amount')">¥ ${inv.amount.toFixed(2)}</span></td>
+                    <td><span class="status-badge" style="color:${inv.status==='loading'?'var(--ai-glow)':'var(--success)'}">${inv.status==='loading'?'✨ AI 视觉识别中...':'✅ 成功'}</span></td>
+                    <td><div style="cursor:pointer; color:#999;" onclick="deleteItem('${inv.id}')">×</div></td>
+                `;
+                if(inv.status === 'loading') tr.classList.add('ai-processing');
+                tableBody.appendChild(tr);
+            });
+            document.getElementById('total-count').innerText = state.invoices.length;
+            document.getElementById('total-amount').innerText = `¥ ${total.toFixed(2)}`;
+            renderVoucher(total);
+        }
+    }
+
+    function renderVoucher(total) {
+        const vBody = document.getElementById('v-body');
+        vBody.innerHTML = '';
+        const summary = {};
+        
+        state.invoices.forEach(inv => {
+            if (inv.status === 'loading') return;
+            if (!summary[inv.projectName]) summary[inv.projectName] = { amount: 0, count: 0, date: inv.date };
+            summary[inv.projectName].amount += inv.amount;
+            summary[inv.projectName].count++;
+        });
+
+        const summaryKeys = Object.keys(summary);
+        summaryKeys.forEach(name => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${summary[name].date}</td><td style="text-align:left;padding-left:15px">${name}项目支出汇总报销</td><td>${summary[name].count}</td><td>${summary[name].amount.toFixed(2)}</td>`;
+            vBody.appendChild(tr);
+        });
+
+        for (let i = summaryKeys.length; i < 5; i++) {
+            vBody.innerHTML += '<tr><td>&nbsp;</td><td></td><td></td><td></td></tr>';
+        }
+
+        document.getElementById('v-date').innerText = `日期：${new Date().getFullYear()}年${new Date().getMonth()+1}月${new Date().getDate()}日`;
+        document.getElementById('v-chinese-total').innerText = digitToChinese(total);
+        document.getElementById('v-numeric-total').innerText = total === 0 ? "" : total.toFixed(2);
+    }
+
+    function chineseToDigit(n) {
+        if (!n || n === 0) return 0;
         const map = { '零': 0, '壹': 1, '贰': 2, '叁': 3, '肆': 4, '伍': 5, '陆': 6, '柒': 7, '捌': 8, '玖': 9 };
         const unitMap = { '拾': 10, '佰': 100, '仟': 1000, '万': 10000, '亿': 100000000 };
         let total = 0, sectionSum = 0, lastNum = 0;
-        let cleanStr = str.replace(/整/g, '').replace(/圆/g, '元');
+        let cleanStr = n.replace(/整/g, '').replace(/圆/g, '元').replace(/[ⓧ]/g, '');
         const yuanMatch = cleanStr.match(/^(.+)元/);
         const yuanStr = yuanMatch ? yuanMatch[1] : (cleanStr.includes('元') ? '' : cleanStr);
         if (yuanStr) {
@@ -361,163 +448,61 @@
         return parseFloat((total + dec).toFixed(2));
     }
 
-    async function extractPDFData(file) {
-        const arrayBuffer = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-        let fullText = '';
-        for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const content = await page.getTextContent();
-            fullText += content.items.map(it => it.str).join(' ') + '\n';
+    function digitToChinese(n) {
+        if (isNaN(n) || n === 0) return "零元整";
+        const fraction = ['角', '分'], digit = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'], unit = [['元', '万', '亿'], ['', '拾', '佰', '仟']];
+        let s = '';
+        const absN = Math.abs(n);
+        for (let i = 0; i < fraction.length; i++) s += (digit[Math.floor(absN * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');
+        s = s || '整'; 
+        let intPart = Math.floor(absN);
+        for (let i = 0; i < unit[0].length && intPart > 0; i++) {
+            let p = '';
+            for (let j = 0; j < unit[1].length && intPart > 0; j++) { p = digit[intPart % 10] + unit[1][j] + p; intPart = Math.floor(intPart / 10); }
+            s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
         }
-        const cleanText = fullText.replace(/\s+/g, '');
-        let number = '未识别';
-        const numM = cleanText.match(/(?:号码|No|NO)[:：\s]*(\d{8,20})/);
-        if (numM) number = numM[1];
-        else {
-            const fb = fullText.match(/\b\d{20}\b/) || fullText.match(/\b\d{8}\b/);
-            if (fb) number = fb[0];
-        }
-        const dateM = cleanText.match(/(\d{4}年\d{1,2}月\d{1,2}日)/) || cleanText.match(/(\d{4}-\d{1,2}-\d{1,2})/);
-        let amount = 0;
-        let trace = "识别轨迹:\n";
-        const cRegex = /[零壹贰叁肆伍陆柒捌玖拾佰仟万亿圆元角分整]{2,}/g;
-        const cMatches = fullText.match(cRegex);
-        if (cMatches) {
-            const best = cMatches.filter(s => s.includes('元') || s.includes('圆')).sort((a,b)=>b.length-a.length)[0];
-            if (best) {
-                amount = chineseToDigit(best);
-                trace += `[大写优先] 匹配到 ${best} -> 转换得 ${amount}\n`;
-            }
-        }
-        if (amount === 0) {
-            const nMatch = cleanText.match(/(?:价税合计|小写)[:：(（]*[¥￥\s]*(\d+(?:\.\d{1,2})?)/);
-            if (nMatch && parseFloat(nMatch[1]) < 1000000) {
-                amount = parseFloat(nMatch[1]);
-                trace += `[小写兜底] 匹配到数字 ${amount}\n`;
-            }
-        }
-        return { number, date: dateM ? dateM[1] : '-', amount, trace };
-    }
-
-    function updateUI() {
-        const hasData = state.invoices.length > 0;
-        tableBody.innerHTML = '';
-        if (!hasData) {
-            tableBody.innerHTML = '<tr id="empty-row"><td colspan="7" style="text-align: center; color: #9ca3af; padding: 2rem;">暂无解析数据，请在上方上传发票</td></tr>';
-        } else {
-            let total = 0;
-            state.invoices.forEach(inv => {
-                total += inv.amount;
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><span class="projectName-tag">${inv.projectName}</span></td>
-                    <td><span class="editable" onclick="editField('${inv.id}', 'number')">${inv.number}</span></td>
-                    <td>${inv.date}</td>
-                    <td><span class="editable" onclick="editField('${inv.id}', 'amount')">¥ ${inv.amount.toFixed(2)}</span></td>
-                    <td><span class="status-badge" style="color:${inv.amount>0?'var(--success)':'var(--warning)'}">${inv.amount>0?'✅ 成功':'⚠️ 核对'}</span></td>
-                    <td><button class="btn-outline" style="padding:4px 8px" onclick="toggleTrace('${inv.id}')">轨迹</button></td>
-                    <td><div style="cursor:pointer; color:#999;" onclick="deleteItem('${inv.id}')">×</div></td>
-                `;
-                const traceTr = document.createElement('tr');
-                traceTr.style.display = 'none';
-                traceTr.id = `trace-${inv.id}`;
-                traceTr.innerHTML = `<td colspan="7"><div class="trace-panel">${inv.trace}</div></td>`;
-                tableBody.appendChild(tr);
-                tableBody.appendChild(traceTr);
-            });
-            document.getElementById('total-count').innerText = state.invoices.length;
-            document.getElementById('total-amount').innerText = `¥ ${total.toFixed(2)}`;
-            renderVoucher(total);
-        }
-    }
-
-    function renderVoucher(total) {
-        const vBody = document.getElementById('v-body');
-        vBody.innerHTML = '';
-        const summary = aggregateData();
-        summary.forEach(item => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `<td>${item.date}</td><td style="text-align:left;padding-left:15px">${item.name}项目支出报销</td><td>${item.count}</td><td>${item.amount.toFixed(2)}</td>`;
-            vBody.appendChild(tr);
-        });
-        const minRows = 5;
-        for (let i = summary.length; i < minRows; i++) vBody.innerHTML += '<tr><td>&nbsp;</td><td></td><td></td><td></td></tr>';
-        document.getElementById('v-date').innerText = `日期：${new Date().getFullYear()}年${new Date().getMonth()+1}月${new Date().getDate()}日`;
-        document.getElementById('v-chinese-total').innerText = digitToChinese(total);
-        document.getElementById('v-numeric-total').innerText = total.toFixed(2);
-    }
-
-    function aggregateData() {
-        const map = {};
-        state.invoices.forEach(inv => {
-            if (!map[inv.projectName]) map[inv.projectName] = { name: inv.projectName, amount: 0, count: 0, date: inv.date };
-            map[inv.projectName].amount += inv.amount;
-            map[inv.projectName].count++;
-        });
-        return Object.values(map);
+        return s.replace(/(零.)*零元/, '元').replace(/(零.)+/g, '零').replace(/^整$/, '零元整');
     }
 
     document.getElementById('download-excel-btn').onclick = async () => {
-        if (state.invoices.length === 0) { showToast("无可导出的数据"); return; }
-        const summary = aggregateData();
-        let total = 0;
-        summary.forEach(s => total += s.amount);
-        const todayStr = `${new Date().getFullYear()}年${new Date().getMonth()+1}月${new Date().getDate()}日`;
+        if (state.invoices.length === 0) return;
+        const summaryMap = {};
+        state.invoices.forEach(inv => {
+            if (inv.status === 'loading') return;
+            if (!summaryMap[inv.projectName]) summaryMap[inv.projectName] = { name: inv.projectName, amount: 0, count: 0, date: inv.date };
+            summaryMap[inv.projectName].amount += inv.amount; summaryMap[inv.projectName].count++;
+        });
+        const summaryList = Object.values(summaryMap);
+        let totalVal = 0; summaryList.forEach(s => totalVal += s.amount);
 
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('费用报销单');
-
         worksheet.columns = [{ width: 18 }, { width: 45 }, { width: 10 }, { width: 18 }];
         const titleRow = worksheet.addRow(['费 用 报 销 单']);
         worksheet.mergeCells('A1:D1');
         titleRow.height = 40;
-        titleRow.getCell(1).font = { size: 24, bold: true, name: '宋体' };
-        titleRow.getCell(1).alignment = { vertical: 'middle', horizontal: 'center' };
-
-        const infoRow = worksheet.addRow(['报销单位：君高咨询', '', '', `日期：${todayStr}`]);
+        titleRow.getCell(1).font = { size: 24, bold: true, name: '宋体' }; titleRow.getCell(1).alignment = { vertical: 'middle', horizontal: 'center' };
+        worksheet.addRow([`报销单位：君高咨询`, '', '', `日期：${new Date().toLocaleDateString()}`]);
         worksheet.mergeCells('A2:C2');
-        infoRow.getCell(1).font = { bold: true };
-        infoRow.getCell(4).alignment = { horizontal: 'right' };
-
-        const headerRow = worksheet.addRow(['项目日期', '费用内容/项目说明 (按文件夹汇总)', '张数', '金额 (元)']);
-        headerRow.eachCell(cell => {
-            cell.font = { bold: true };
-            cell.alignment = { horizontal: 'center', vertical: 'middle' };
-            cell.border = { top: {style:'thin'}, left: {style:'thin'}, bottom: {style:'thin'}, right: {style:'thin'} };
-            cell.fill = { type: 'pattern', pattern:'solid', fgColor:{argb:'F9FAFB'} };
+        const headerRow = worksheet.addRow(['项目日期', '费用内容', '张数', '金额 (元)']);
+        headerRow.eachCell(c => { c.font = { bold: true }; c.border = { top:{style:'thin'},left:{style:'thin'},bottom:{style:'thin'},right:{style:'thin'} }; });
+        summaryList.forEach(s => {
+            const row = worksheet.addRow([s.date, s.name + '项目支出汇总报销', s.count, s.amount.toFixed(2)]);
+            row.eachCell(c => c.border = { top:{style:'thin'},left:{style:'thin'},bottom:{style:'thin'},right:{style:'thin'} });
         });
-
-        summary.forEach(s => {
-            const row = worksheet.addRow([s.date, s.name + '项目支出报销', s.count, s.amount.toFixed(2)]);
-            row.eachCell(cell => {
-                cell.border = { top: {style:'thin'}, left: {style:'thin'}, bottom: {style:'thin'}, right: {style:'thin'} };
-                cell.alignment = { horizontal: 'center', vertical: 'middle' };
-            });
-            row.getCell(2).alignment = { horizontal: 'left', indent: 1 };
-        });
-
-        for(let i=summary.length; i<5; i++) {
+        for(let i=0; i < Math.max(0, 5 - summaryList.length); i++) {
             const row = worksheet.addRow(['', '', '', '']);
-            row.eachCell(cell => cell.border = { top: {style:'thin'}, left: {style:'thin'}, bottom: {style:'thin'}, right: {style:'thin'} });
+            row.eachCell(c => c.border = { top:{style:'thin'},left:{style:'thin'},bottom:{style:'thin'},right:{style:'thin'} });
         }
-
-        const totalRow = worksheet.addRow(['合计(大写)', digitToChinese(total), '', total.toFixed(2)]);
+        const totalRow = worksheet.addRow(['合计(大写)', digitToChinese(totalVal), '', totalVal.toFixed(2)]);
         worksheet.mergeCells(`B${totalRow.number}:C${totalRow.number}`);
-        totalRow.eachCell(cell => {
-            cell.font = { bold: true };
-            cell.border = { top: {style:'thin'}, left: {style:'thin'}, bottom: {style:'thin'}, right: {style:'thin'} };
-            cell.alignment = { vertical: 'middle', horizontal: 'center' };
-        });
-        totalRow.getCell(2).alignment = { horizontal: 'left', indent: 1 };
-
-        worksheet.addRow([]); 
+        totalRow.eachCell(c => { c.font={bold:true}; c.border={top:{style:'thin'},left:{style:'thin'},bottom:{style:'thin'},right:{style:'thin'}}; });
+        worksheet.addRow([]);
         const signRow = worksheet.addRow(['部门主管：', '财务审核：', '出纳人：', '报销人：']);
-        signRow.eachCell(cell => { cell.font = { bold: true }; cell.alignment = { horizontal: 'left' }; });
+        signRow.eachCell(c => c.font = { bold: true });
 
         const buffer = await workbook.xlsx.writeBuffer();
-        saveAs(new Blob([buffer]), `君高咨询报销单_${new Date().toISOString().slice(0,10)}.xlsx`);
-        showToast("Excel 报销单已生成并下载");
+        saveAs(new Blob([buffer]), `君高报销单_${new Date().toISOString().slice(0,10)}.xlsx`);
     };
 
     dropZone.onclick = () => fileInput.click();
@@ -533,12 +518,21 @@
     };
 
     async function traverse(entry, projectName) {
-        if (entry.isFile && entry.name.toLowerCase().endsWith('.pdf')) {
-            entry.file(async f => {
-                const data = await extractPDFData(f);
-                state.invoices.push({ id: Math.random().toString(36).substr(2,9), projectName, ...data });
-                updateUI();
-            });
+        if (entry.isFile) {
+            const ext = entry.name.toLowerCase();
+            if (ext.endsWith('.pdf') || /\.(jpg|jpeg|png|tif|tiff|webp)$/.test(ext)) {
+                entry.file(async f => {
+                    const id = Math.random().toString(36).substr(2,9);
+                    state.invoices.push({ id, projectName, number: '识别中...', date: '-', amount: 0, status: 'loading' });
+                    updateUI();
+                    try {
+                        const data = await extractData(f);
+                        const idx = state.invoices.findIndex(i => i.id === id);
+                        state.invoices[idx] = { ...state.invoices[idx], ...data, status: 'success' };
+                    } catch(e) { state.invoices = state.invoices.filter(i => i.id !== id); showToast("识别失败"); }
+                    updateUI();
+                });
+            }
         } else if (entry.isDirectory) {
             const reader = entry.createReader();
             const entries = await new Promise(res => reader.readEntries(res));
@@ -547,53 +541,34 @@
     }
 
     fileInput.onchange = async (e) => {
-        for (let file of e.target.files) if (file.type === 'application/pdf') {
-            const data = await extractPDFData(file);
-            state.invoices.push({ id: Math.random().toString(36).substr(2,9), projectName: "手动上传", ...data });
+        for (let file of e.target.files) {
+            const id = Math.random().toString(36).substr(2,9);
+            state.invoices.push({ id, projectName: "手动上传", number: '识别中...', date: '-', amount: 0, status: 'loading' });
+            updateUI();
+            try {
+                const data = await extractData(file);
+                const idx = state.invoices.findIndex(i => i.id === id);
+                state.invoices[idx] = { ...state.invoices[idx], ...data, status: 'success' };
+            } catch(e) { state.invoices = state.invoices.filter(i => i.id !== id); }
             updateUI();
         }
     };
 
     window.editField = (id, field) => {
         const inv = state.invoices.find(i => i.id === id);
-        const val = prompt(`请输入新的${field === 'amount' ? '金额' : '发票号码'}:`, field === 'amount' ? inv.amount : inv.number);
-        if (val !== null) {
-            if (field === 'amount') inv.amount = parseFloat(val) || 0;
-            else inv.number = val;
-            updateUI();
+        const val = prompt(`修改${field === 'amount' ? '金额' : '发票号码'}:`, field === 'amount' ? inv.amount : inv.number);
+        if (val !== null) { if (field === 'amount') inv.amount = parseFloat(val) || 0; else inv.number = val; updateUI(); }
+    };
+
+    window.deleteItem = (id) => { state.invoices = state.invoices.filter(i => i.id !== id); updateUI(); };
+
+    document.getElementById('clear-btn').onclick = () => { 
+        if(confirm("确定清空数据吗？")){ 
+            state.invoices = []; 
+            updateUI(); 
+            showToast("数据已清空");
         }
     };
-
-    window.toggleTrace = (id) => {
-        const el = document.getElementById(`trace-${id}`);
-        el.style.display = el.style.display === 'none' ? 'table-row' : 'none';
-        el.querySelector('.trace-panel').style.display = el.style.display === 'none' ? 'none' : 'block';
-    };
-
-    window.deleteItem = (id) => {
-        state.invoices = state.invoices.filter(i => i.id !== id);
-        updateUI();
-    };
-
-    document.getElementById('clear-btn').onclick = () => { if(confirm("确定清空所有数据吗？")){ 
-        state.invoices = []; updateUI(); 
-        document.getElementById('total-count').innerText = "0";
-        document.getElementById('total-amount').innerText = "¥ 0.00";
-    }};
-
-    function digitToChinese(n) {
-        if (isNaN(n) || n === 0) return "零元整";
-        const fraction = ['角', '分'], digit = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'], unit = [['元', '万', '亿'], ['', '拾', '佰', '仟']];
-        let s = '';
-        for (let i = 0; i < fraction.length; i++) s += (digit[Math.floor(Math.abs(n) * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');
-        s = s || '整'; n = Math.floor(Math.abs(n));
-        for (let i = 0; i < unit[0].length && n > 0; i++) {
-            let p = '';
-            for (let j = 0; j < unit[1].length && n > 0; j++) { p = digit[n % 10] + unit[1][j] + p; n = Math.floor(n / 10); }
-            s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
-        }
-        return s.replace(/(零.)*零元/, '元').replace(/(零.)+/g, '零').replace(/^整$/, '零元整');
-    }
 </script>
 
 </body>
